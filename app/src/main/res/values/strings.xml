@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WC System</string>
+
+    <string name="tab_menu_channel1">CH1</string>
+    <string name="tab_menu_channel2">CH2</string>
+    <string name="tab_menu_channel3">CH3</string>
+    <string name="tab_menu_channel4">CH4</string>
+</resources>
