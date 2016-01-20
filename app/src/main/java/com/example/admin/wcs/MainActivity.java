@@ -10,7 +10,7 @@ import android.widget.RadioGroup;
 public class MainActivity extends AppCompatActivity {
 
     private RadioGroup radioGroupBar;
-    private RadioButton radioButtonChannel1;
+    private RadioButton radioButtonChannel1 ;
 
     //Fragment Object
     private MyFragment1 FragmentPage1;
