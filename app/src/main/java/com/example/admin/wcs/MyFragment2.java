@@ -37,6 +37,7 @@ public class MyFragment2 extends Fragment {
                 //      customView.setCurrent_x(current_x);
                 //      customView.setCurrent_y(current_y);
                 final int actionMasked = action & MotionEvent.ACTION_MASK;
+                current_y -= getStatusBarHeight();      //去掉状态栏高度差值
                 if(customView.out_cirlce(current_x,current_y)){
                     customView.setNewPointXY(current_x,current_y);
                 }
@@ -149,7 +150,6 @@ public class MyFragment2 extends Fragment {
             Log.d("MyFragment2","onDraw current_x is "+current_x);
             Log.d("MyFragment2", "onDraw current_y is " + current_y);
             canvas.drawCircle(canvas_x, canvas_y, canvas_length, PaintRange);
-            canvas.drawLine(canvas_x,canvas_y, current_x, current_y,PaintRange);
             canvas.drawCircle(current_x, current_y, current_length, PaintRange); //画圆圈
             //画出圆球
 
@@ -197,5 +197,14 @@ public class MyFragment2 extends Fragment {
                 invalidate();
             }
         }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
