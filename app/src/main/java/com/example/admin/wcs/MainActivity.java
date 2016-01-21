@@ -1,14 +1,17 @@
 package com.example.admin.wcs;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.view.MotionEvent;
+import android.view.Window;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
     private RadioGroup radioGroupBar;
     private RadioButton radioButtonChannel1;
 
@@ -18,10 +21,12 @@ public class MainActivity extends AppCompatActivity {
     private MyFragment3 FragmentPage3;
     private MyFragment4 FragmentPage4;
     private FragmentManager fManager;
+    private ArrayList<MainActivity.Mytouchlisener> mytouchliseners = new ArrayList<Mytouchlisener>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
 
         fManager = getFragmentManager();
 
@@ -83,7 +88,23 @@ public class MainActivity extends AppCompatActivity {
         if(FragmentPage3 != null)fragmentTransaction.hide(FragmentPage3);
         if(FragmentPage4 != null)fragmentTransaction.hide(FragmentPage4);
     }
+    public interface Mytouchlisener{
+        public void onTouchEvent(MotionEvent event );
+    }
+    public void registerMyTouchListener(Mytouchlisener listener){
+        mytouchliseners.add(listener);
+    }
+    public void unregisterMyTouchListener(Mytouchlisener listener){
+        mytouchliseners.remove(listener);
+    }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        for(Mytouchlisener listener:mytouchliseners){
+            listener.onTouchEvent(ev);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
     //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        // Handle action bar item clicks here. The action bar will
