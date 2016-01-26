@@ -6,16 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PathEffect;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class MyFragment2 extends Fragment {
     private float current_x = 0;
@@ -27,6 +24,7 @@ public class MyFragment2 extends Fragment {
 
         final CustomView customView = new CustomView(this.getActivity());
         mytouchlisener = new MainActivity.Mytouchlisener(){
+            private boolean first_point_out = false;
             @Override
             public void onTouchEvent(MotionEvent event) {
                 final int action = event.getAction();
@@ -38,12 +36,23 @@ public class MyFragment2 extends Fragment {
                 //      customView.setCurrent_y(current_y);
                 final int actionMasked = action & MotionEvent.ACTION_MASK;
                 current_y -= getStatusBarHeight();      //去掉状态栏高度差值
+                if(actionMasked == MotionEvent.ACTION_DOWN){
+                    first_point_out = true;
+                }
                 if(customView.out_cirlce(current_x,current_y)){
-                    customView.setNewPointXY(current_x,current_y);
+                    if(first_point_out){
+                        current_x = customView.getCanvas_x();
+                        current_y = customView.getCanvas_y();
+                    }else {
+                        customView.setNewPointXY(current_x, current_y);
+                    }
+                }else{
+                    first_point_out = false;
                 }
                 if(actionMasked == MotionEvent.ACTION_UP) {
                     current_x = customView.getCanvas_x();
                     current_y = customView.getCanvas_y();
+                    first_point_out = false;
                     //     customView.setCurrent_x(current_x);
                     //     customView.setCurrent_y(current_y);
                     Log.d("onTouchEvent","ACTION_UP");
@@ -190,7 +199,7 @@ public class MyFragment2 extends Fragment {
             PaintPoint.setStrokeWidth(10);
             PaintPoint.setColor(Color.BLACK);
             canvas.drawLine(0, 10, 0, -60, PaintPoint);
-            if(first_view == false){
+            if(!first_view){
                 first_view = true;
                 current_x = canvas_x;
                 current_y = canvas_y;
