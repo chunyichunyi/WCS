@@ -12,4 +12,6 @@
     <color name="colorTest">#FFC800</color>
     <color name="colorTestBackground">#FFFFFF</color>
 
+    <color name="colorLoginBackground">#27A5F9</color>
+
 </resources>

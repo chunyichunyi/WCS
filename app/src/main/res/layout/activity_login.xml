@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLoginBackground"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/image_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
+            android:background="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_app"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="hello world"
+            android:textColor="@color/colorTest"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/textView_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IP:  "
+            android:layout_below="@id/text_content"
+            android:layout_alignLeft="@id/text_content"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/textView_port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PORT:  "
+            android:layout_below="@id/textView_ip"
+            android:layout_alignLeft="@id/text_content"
+            android:layout_marginTop="20dp" />
+
+        <EditText
+            android:id="@+id/editText_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textView_port"
+            android:layout_alignRight="@id/text_content"
+            android:layout_alignTop="@+id/textView_ip"
+            android:layout_marginTop="-15dp"
+            android:textCursorDrawable="@null" />
+
+        <EditText
+            android:id="@+id/editText_port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textView_port"
+            android:layout_alignRight="@id/text_content"
+            android:layout_alignTop="@+id/textView_port"
+            android:layout_marginTop="-15dp"
+            android:textCursorDrawable="@null" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="login"/>
+
+        <Button
+            android:id="@+id/button_debug"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_login"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="debug"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

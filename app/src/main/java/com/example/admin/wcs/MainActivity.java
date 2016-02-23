@@ -3,30 +3,40 @@ package com.example.admin.wcs;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.view.MotionEvent;
-import android.view.Window;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    public MyApplication mMyApplication;
+
     private RadioGroup radioGroupBar;
     private RadioButton radioButtonChannel1;
 
     //Fragment Object
-    private MyFragment1 FragmentPage1;
-    private MyFragment2 FragmentPage2;
-    private MyFragment3 FragmentPage3;
-    private MyFragment4 FragmentPage4;
+    private Fragment1 FragmentPage1;
+    private Fragment2 FragmentPage2;
+    private Fragment3 FragmentPage3;
+    private Fragment4 FragmentPage4;
     private FragmentManager fManager;
-    private ArrayList<MainActivity.Mytouchlisener> mytouchliseners = new ArrayList<Mytouchlisener>();
+
+    //保存MyTouchListener接口的列表
+    private ArrayList<MyTouchListener> myTouchListeners = new ArrayList<>();
+
+    private long exitTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        mMyApplication = ((MyApplication)getApplicationContext());
 
         fManager = getFragmentManager();
 
@@ -46,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             switch (checkedId){
                 case R.id.radioButton_channel1:
                     if(FragmentPage1 == null){
-                        FragmentPage1 = new MyFragment1();
+                        FragmentPage1 = new Fragment1();
                         fTransaction.add(R.id.ly_content,FragmentPage1);
                     }else{
                         fTransaction.show(FragmentPage1);
@@ -54,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.radioButton_channel2:
                     if(FragmentPage2 == null){
-                        FragmentPage2 = new MyFragment2();
+                        FragmentPage2 = new Fragment2();
                         fTransaction.add(R.id.ly_content,FragmentPage2);
                     }else{
                         fTransaction.show(FragmentPage2);
@@ -62,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.radioButton_channel3:
                     if(FragmentPage3 == null){
-                        FragmentPage3 = new MyFragment3();
+                        FragmentPage3 = new Fragment3();
                         fTransaction.add(R.id.ly_content,FragmentPage3);
                     }else{
                         fTransaction.show(FragmentPage3);
@@ -70,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.radioButton_channel4:
                     if(FragmentPage4 == null){
-                        FragmentPage4 = new MyFragment4();
+                        FragmentPage4 = new Fragment4();
                         fTransaction.add(R.id.ly_content,FragmentPage4);
                     }else{
                         fTransaction.show(FragmentPage4);
@@ -88,23 +98,48 @@ public class MainActivity extends AppCompatActivity {
         if(FragmentPage3 != null)fragmentTransaction.hide(FragmentPage3);
         if(FragmentPage4 != null)fragmentTransaction.hide(FragmentPage4);
     }
-    public interface Mytouchlisener{
-        public void onTouchEvent(MotionEvent event );
-    }
-    public void registerMyTouchListener(Mytouchlisener listener){
-        mytouchliseners.add(listener);
-    }
-    public void unregisterMyTouchListener(Mytouchlisener listener){
-        mytouchliseners.remove(listener);
+
+    //回调接口
+    public interface MyTouchListener {
+        void onTouchEvent(MotionEvent event);
     }
 
+    //提供给Fragment通过getActivity()方法来注册自己的触摸事件的方法
+    public void registerMyTouchListener(MyTouchListener listener) {
+        myTouchListeners.add(listener);
+    }
+
+    //提供给Fragment通过getActivity()方法来取消注册自己的触摸事件的方法
+    public void unRegisterMyTouchListener(MyTouchListener listener) {
+        myTouchListeners.remove(listener);
+    }
+
+     //分发触摸事件给所有注册了MyTouchListener的接口
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        for(Mytouchlisener listener:mytouchliseners){
+        // TODO Auto-generated method stub
+        for (MyTouchListener listener : myTouchListeners) {
             listener.onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if((System.currentTimeMillis()-exitTime) > 2000) {      //System.currentTimeMillis()无论何时调用，肯定大于2000
+                Toast.makeText(getApplicationContext(), "Press again to exit the program", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            }
+            else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        // Handle action bar item clicks here. The action bar will
@@ -116,52 +151,6 @@ public class MainActivity extends AppCompatActivity {
 //        if (id == R.id.item_wifi_config) {
 //            //调用wifi配置
 //            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-//
-//            return true;
-//        }
-//
-//        if (id == R.id.item_bt_config) {
-//            //弹出对话框
-//            new AlertDialog.Builder(MainActivity.this)
-//                    .setTitle("WCS")
-//                    .setMessage("Coming soon...")
-//                    .setPositiveButton("yes", null)
-//                    .show();
-//
-//            return true;
-//        }
-//
-//        if (id == R.id.item_reset_connection) {
-//            try {
-//                mSocket.close();
-//                mSocket = null;
-//            } catch (Exception e) {
-//                // TODO: handle exception
-//                Log.e("tcp", "reset connection fail", e);
-//            }
-//
-//            mStrMSG = RESET_STRING;                             //复位消息
-//            mHandler.sendMessage(mHandler.obtainMessage());     // 发送消息
-//
-//            //弹出对话框
-//            new AlertDialog.Builder(MainActivity.this)
-//                    .setTitle("WCS")
-//                    .setMessage("Reset connection successful.")
-//                    .setPositiveButton("yes", null)
-//                    .show();
-//
-//            return true;
-//        }
-//
-//        if (id == R.id.item_about) {
-//            //弹出对话框
-//            new AlertDialog.Builder(MainActivity.this)
-//                    .setTitle("WCS")
-//                    .setMessage("Wireless Control System 0.2.7\n" +
-//                                "built on January 14, 2016")
-//                    .setPositiveButton("yes", null)
-//                    .show();
-//
 //            return true;
 //        }
 //        return super.onOptionsItemSelected(item);

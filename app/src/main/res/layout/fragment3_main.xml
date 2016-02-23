@@ -3,14 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorTestBackground">
+    android:background="@color/colorTestBackground"
+    android:padding="5dp" >
 
     <TextView
         android:id="@+id/txt_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="hello world"
+        android:text="New Text"
         android:textColor="@color/colorTest"
         android:textSize="20sp"/>
 
